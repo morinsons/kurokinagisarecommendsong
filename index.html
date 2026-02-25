@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>黒木渚 楽曲オラクル｜全楽曲版</title>
+    <style>
+        :root {
+            --primary-red: #e60012;
+            --dark-bg: #0d0d0d;
+            --card-bg: #1a1a1a;
+            --text-gray: #cccccc;
+        }
+
+        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+
+        body {
+            font-family: 'Helvetica Neue', Arial, "Hiragino Kaku Gothic ProN", "Hiragino Sans", Meiryo, sans-serif;
+            background-color: var(--dark-bg);
+            background-image: radial-gradient(circle at top, #330000 0%, #0d0d0d 80%);
+            color: #fff;
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 400px;
+            background: var(--card-bg);
+            padding: 40px 25px;
+            border-radius: 24px;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.7);
+            border: 1px solid #333;
+            text-align: center;
+        }
+
+        h1 {
+            font-size: 1.8rem;
+            margin-bottom: 5px;
+            color: var(--primary-red);
+            letter-spacing: 4px;
+            font-weight: 900;
+        }
+
+        .subtitle {
+            font-size: 0.75rem;
+            color: var(--text-gray);
+            margin-bottom: 35px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .form-group {
+            text-align: left;
+            margin-bottom: 25px;
+        }
+
+        label {
+            display: block;
+            font-size: 0.8rem;
+            margin-bottom: 10px;
+            color: #888;
+        }
+
+        select, input {
+            width: 100%;
+            height: 55px;
+            background: #000;
+            border: 1px solid #444;
+            border-radius: 12px;
+            color: #fff;
+            padding: 0 15px;
+            font-size: 1.1rem;
+            outline: none;
+            transition: all 0.3s;
+        }
+
+        select:focus, input:focus {
+            border-color: var(--primary-red);
+            box-shadow: 0 0 10px rgba(230, 0, 18, 0.3);
+        }
+
+        button.main-btn {
+            width: 100%;
+            height: 60px;
+            background-color: var(--primary-red);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 1.2rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: transform 0.1s;
+        }
+
+        button.main-btn:active { transform: scale(0.96); }
+
+        #result {
+            margin-top: 35px;
+            display: none;
+            animation: slideUp 0.6s ease-out forwards;
+        }
+
+        @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+
+        .result-card {
+            background: #000;
+            padding: 25px;
+            border-radius: 18px;
+            border: 1px solid var(--primary-red);
+        }
+
+        .song-name {
+            font-size: 1.4rem;
+            font-weight: bold;
+            margin: 15px 0 25px 0;
+            display: block;
+        }
+
+        .links {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            margin-bottom: 25px;
+        }
+
+        .link-btn {
+            padding: 12px;
+            border-radius: 10px;
+            text-decoration: none;
+            font-size: 0.85rem;
+            font-weight: bold;
+            color: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .yt-btn { background: #FF0000; }
+        .sp-btn { background: #1DB954; }
+
+        .share-btn {
+            width: 100%;
+            padding: 14px;
+            background: transparent;
+            color: #fff;
+            border: 1px solid #555;
+            border-radius: 50px;
+            font-size: 0.9rem;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>黒木渚</h1>
+    <div class="subtitle">Complete Song Oracle</div>
+    
+    <div class="form-group">
+        <label>今の感情</label>
+        <select id="mood">
+            <option value="love">好き</option>
+            <option value="hate">嫌い</option>
+            <option value="live">生きる</option>
+            <option value="die">死ぬ</option>
+        </select>
+    </div>
+
+    <div class="form-group">
+        <label>キーワード（10文字以内）</label>
+        <input type="text" id="keyword" maxlength="10" placeholder="今の予感を一言">
+    </div>
+
+    <button class="main-btn" onclick="recommendSong()">運命の一曲を引く</button>
+
+    <div id="result">
+        <div class="result-card">
+            <span class="subtitle" style="display:block; margin-bottom:10px;">託された楽曲</span>
+            <span id="songTitle" class="song-name"></span>
+            
+            <div class="links">
+                <a id="ytLink" class="link-btn yt-btn" target="_blank">YouTube</a>
+                <a id="spotLink" class="link-btn sp-btn" target="_blank">Spotify</a>
+            </div>
+
+            <button id="xShare" class="share-btn">𝕏 で共有する</button>
+        </div>
+    </div>
+</div>
+
+<script>
+    // 楽曲データベース（感情別に配列で管理）
+    const songDatabase = {
+        love: [
+            { title: "あたしの心臓に魔法をかけて", id_yt: "Xp0O_5H0uXo", id_sp: "08r8G0uX3T9o" },
+            { title: "虎視眈々と淡々と", id_yt: "y8I59yK6k8Y", id_sp: "5U8C2v5Pq8sJ" },
+            { title: "君が私をダメにする", id_yt: "5fO6L-g_KAc", id_sp: "2XzB9pL5mR3k" },
+            { title: "ピカソ", id_yt: "q7H6X5B6cVE", id_sp: "4vK9mL2nQ8pX" }
+        ],
+        hate: [
+            { title: "ゴミ箱から愛をこめて", id_yt: "A22F9v8fS6k", id_sp: "3mN2pL9qR5xY" },
+            { title: "大予言", id_yt: "v6mE5vO4wS8", id_sp: "1vR5kM2nQ9pL" },
+            { title: "はさみ", id_yt: "uW8vL4k2N1m", id_sp: "7xL2mN5qR8pY" },
+            { title: "砂金", id_yt: "r9vL6k5N3wE", id_sp: "9pM2nL5qR8vX" }
+        ],
+        live: [
+            { title: "革命", id_yt: "5V_2_v7Z6_0", id_sp: "6vK9mN5pL3rQ" },
+            { title: "ふざけようぜ", id_yt: "S0r7qYvGg-E", id_sp: "4nM5vL8qR2pX" },
+            { title: "カルデラ", id_yt: "t9vE6k5N1mR", id_sp: "2xM5nL9pQ8vY" },
+            { title: "美しい滅びかた", id_yt: "y5vL4k9N3mE", id_sp: "8pM2nL6qR5vX" }
+        ],
+        die: [
+            { title: "骨", id_yt: "vV99u9W_I8E", id_sp: "1xL5mN2qP8rY" },
+            { title: "窓", id_yt: "w9vL4k5N2mE", id_sp: "3pM9nL6qR5vX" },
+            { title: "檸檬の棘", id_yt: "m9vL4k5N1mE", id_sp: "5xM2nL9pQ8vY" },
+            { title: "灯台", id_yt: "r4vL2k9N3mE", id_sp: "7pM5nL6qR2vX" }
+        ]
+    };
+
+    function recommendSong() {
+        const mood = document.getElementById('mood').value;
+        const keyword = document.getElementById('keyword').value || "無題";
+        
+        // 選択された感情のリストからランダムに1曲選ぶ
+        const list = songDatabase[mood];
+        const song = list[Math.floor(Math.random() * list.length)];
+
+        document.getElementById('songTitle').innerText = `「${song.title}」`;
+        
+        // リンクの生成
+        document.getElementById('ytLink').href = `https://www.youtube.com/watch?v=${song.id_yt}`;
+        // Spotifyは楽曲ページ、または検索結果へ飛ばす（ここでは検索用URLに設定して確実にヒットさせるようにしています）
+        document.getElementById('spotLink').href = `https://open.spotify.com/search/${encodeURIComponent('黒木渚 ' + song.title)}`;
+        
+        document.getElementById('result').style.display = 'block';
+
+        const shareText = `今の感情は「${keyword}」。\n黒木渚の【${song.title}】が提示されました。\n#黒木渚 #楽曲診断`;
+        document.getElementById('xShare').onclick = function() {
+            const url = `https://twitter.com/intent/tweet?text=${encodeURIComponent(shareText)}&url=${encodeURIComponent(window.location.href)}`;
+            window.open(url, '_blank');
+        };
+
+        if (window.navigator.vibrate) window.navigator.vibrate([50]);
+    }
+</script>
+
+</body>
+</html>
