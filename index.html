@@ -17,7 +17,7 @@
         body {
             font-family: 'Helvetica Neue', Arial, "Hiragino Kaku Gothic ProN", "Hiragino Sans", Meiryo, sans-serif;
             background-color: var(--dark-bg);
-            background-image: radial-gradient(circle at top, #330000 0%, #0d0d0d 80%);
+            background-image: radial-gradient(circle at top, #440000 0%, #0d0d0d 90%);
             color: #fff;
             margin: 0;
             display: flex;
@@ -29,99 +29,109 @@
 
         .container {
             width: 100%;
-            max-width: 400px;
+            max-width: 380px;
             background: var(--card-bg);
-            padding: 40px 25px;
-            border-radius: 24px;
-            box-shadow: 0 20px 50px rgba(0,0,0,0.7);
+            padding: 45px 30px;
+            border-radius: 30px;
+            box-shadow: 0 25px 60px rgba(0,0,0,0.8);
             border: 1px solid #333;
             text-align: center;
         }
 
         h1 {
-            font-size: 1.8rem;
-            margin-bottom: 5px;
+            font-size: 2rem;
+            margin-bottom: 8px;
             color: var(--primary-red);
-            letter-spacing: 4px;
+            letter-spacing: 6px;
             font-weight: 900;
         }
 
         .subtitle {
-            font-size: 0.75rem;
+            font-size: 0.7rem;
             color: var(--text-gray);
-            margin-bottom: 35px;
+            margin-bottom: 40px;
             text-transform: uppercase;
-            letter-spacing: 2px;
+            letter-spacing: 3px;
         }
 
         .form-group {
-            text-align: left;
-            margin-bottom: 25px;
+            text-align: center;
+            margin-bottom: 30px;
         }
 
         label {
             display: block;
-            font-size: 0.8rem;
-            margin-bottom: 10px;
-            color: #888;
+            font-size: 0.9rem;
+            margin-bottom: 15px;
+            color: #aaa;
         }
 
-        select, input {
+        select {
             width: 100%;
-            height: 55px;
+            height: 60px;
             background: #000;
-            border: 1px solid #444;
-            border-radius: 12px;
+            border: 2px solid #333;
+            border-radius: 15px;
             color: #fff;
-            padding: 0 15px;
-            font-size: 1.1rem;
+            padding: 0 20px;
+            font-size: 1.2rem;
+            font-weight: bold;
             outline: none;
+            text-align: center;
             transition: all 0.3s;
+            cursor: pointer;
+        }
+
+        select:focus {
+            border-color: var(--primary-red);
         }
 
         button.main-btn {
             width: 100%;
-            height: 60px;
+            height: 65px;
             background-color: var(--primary-red);
             color: white;
             border: none;
-            border-radius: 12px;
-            font-size: 1.2rem;
+            border-radius: 15px;
+            font-size: 1.3rem;
             font-weight: bold;
             cursor: pointer;
-            transition: transform 0.1s;
+            box-shadow: 0 5px 20px rgba(230, 0, 18, 0.4);
+            transition: transform 0.1s, opacity 0.2s;
         }
 
-        button.main-btn:active { transform: scale(0.96); }
+        button.main-btn:active { transform: scale(0.95); opacity: 0.9; }
 
         #result {
-            margin-top: 35px;
+            margin-top: 40px;
             display: none;
-            animation: slideUp 0.6s ease-out forwards;
+            animation: slideUp 0.8s cubic-bezier(0.22, 1, 0.36, 1) forwards;
         }
 
-        @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes slideUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
 
         .result-card {
             background: #000;
-            padding: 25px;
-            border-radius: 18px;
+            padding: 30px 20px;
+            border-radius: 20px;
             border: 1px solid var(--primary-red);
+            position: relative;
         }
 
         .song-name {
-            font-size: 1.4rem;
+            font-size: 1.5rem;
             font-weight: bold;
-            margin: 15px 0 25px 0;
+            margin: 10px 0 30px 0;
             display: block;
-            line-height: 1.4;
+            line-height: 1.5;
+            color: #fff;
         }
 
         .link-btn {
             width: 100%;
-            padding: 15px;
+            padding: 18px;
             background: #1DB954;
-            border-radius: 10px;
+            border-radius: 12px;
             text-decoration: none;
             font-size: 1rem;
             font-weight: bold;
@@ -129,29 +139,35 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            margin-bottom: 20px;
+            margin-bottom: 25px;
+            transition: opacity 0.2s;
         }
+
+        .link-btn:active { opacity: 0.8; }
 
         .share-btn {
             width: 100%;
             padding: 14px;
             background: transparent;
-            color: #fff;
-            border: 1px solid #555;
+            color: #999;
+            border: 1px solid #444;
             border-radius: 50px;
-            font-size: 0.9rem;
+            font-size: 0.85rem;
             cursor: pointer;
+            transition: all 0.3s;
         }
+
+        .share-btn:active { color: #fff; border-color: #fff; }
     </style>
 </head>
 <body>
 
 <div class="container">
     <h1>黒木渚</h1>
-    <div class="subtitle">Complete Oracle</div>
+    <div class="subtitle">Emotional Oracle</div>
     
     <div class="form-group">
-        <label>今の感情</label>
+        <label>今の感情を選択してください</label>
         <select id="mood">
             <option value="love">好き</option>
             <option value="hate">嫌い</option>
@@ -160,19 +176,14 @@
         </select>
     </div>
 
-    <div class="form-group">
-        <label>キーワード（10文字以内）</label>
-        <input type="text" id="keyword" maxlength="10" placeholder="今の予感">
-    </div>
-
-    <button class="main-btn" onclick="recommendSong()">今の1曲をひく</button>
+    <button class="main-btn" onclick="recommendSong()">今の1曲を受け取る</button>
 
     <div id="result">
         <div class="result-card">
-            <span class="subtitle" style="display:block; margin-bottom:10px;">今の1曲</span>
+            <span class="subtitle" style="display:block; margin-bottom:5px;">あなたに託された１曲</span>
             <span id="songTitle" class="song-name"></span>
             
-            <a id="spotLink" class="link-btn" target="_blank">Spotifyで聴く</a>
+            <a id="spotLink" class="link-btn" target="_blank">Spotify で再生</a>
 
             <button id="xShare" class="share-btn">𝕏 で共有する</button>
         </div>
@@ -180,33 +191,34 @@
 </div>
 
 <script>
-    // Wikipediaから抽出した代表曲データベース
+    // Wikipediaのディスコグラフィに基づいた正確な楽曲リスト
     const songDatabase = {
         love: [
-            "V.I.P", "あたしの心臓あげる", "虎視眈々と淡々と", "君が私をダメにする", 
+            "あたしの心臓あげる", "虎視眈々と淡々と", "君が私をダメにする", 
             "ピカソ", "大予言", "予測不能の1秒先も濁流みたいに愛してる", 
-            "ロマン", "大本命", "金魚姫", "命がけで欲しいものひとつ"
+            "ロマン", "大本命", "金魚姫", "命がけで欲しいものひとつ", "マトリョーシカ", "落雷"
         ],
         hate: [
-            "火の鳥", "はさみ", "砂金", "クマリ", 
+            "原点怪奇", "はさみ", "砂金", "クマリ", 
             "ふざけんな世界、ふざけろよ", "レスポール", "アンチスーパースター", 
-            "マトリョーシカ", "懺悔録", "あしかせ"
+            "懺悔録", "あしかせ", "赤紙", "うすはりの少女"
         ],
         live: [
-            "テーマ", "革命", "アーモンド", "原点回帰", "解放区への旅", 
-            "ピカソ", "独立上昇曲 第一番", "かたつむりとダリア", 
-            "エジソン", "カルデラ", "器器回回"
+            "革命", "アーモンド", "原点怪奇", "解放区への旅", 
+            "テーマ", "独立上昇曲 第一番", "かたつむりとダリア", 
+            "エジソン", "カルデラ", "器器回回", "フラフープ"
         ],
         die: [
-            "骨", "あたしの心臓あげる", "灯台", "檸檬の棘", 
+            "骨", "死んだ文豪に恋をした", "あたしの心臓あげる", "灯台", "檸檬の棘", 
             "死に損ないのパレード", "美しい滅びかた", "ゴーストノート", 
-            "さかさまの雨", "窓", "magnoria"
+            "さかさまの雨", "窓", "ウエット", "白夜"
         ]
     };
 
     function recommendSong() {
-        const mood = document.getElementById('mood').value;
-        const keyword = document.getElementById('keyword').value || "無題";
+        const moodSelect = document.getElementById('mood');
+        const mood = moodSelect.value;
+        const moodText = moodSelect.options[moodSelect.selectedIndex].text;
         
         // ランダム選曲
         const list = songDatabase[mood];
@@ -214,14 +226,14 @@
 
         document.getElementById('songTitle').innerText = `「${songTitle}」`;
         
-        // Spotify検索リンクの生成 (アーティスト名 + 曲名)
+        // Spotify検索リンクの生成
         const searchQuery = encodeURIComponent(`黒木渚 ${songTitle}`);
         document.getElementById('spotLink').href = `https://open.spotify.com/search/${searchQuery}`;
         
         document.getElementById('result').style.display = 'block';
 
         // Xシェア設定
-        const shareText = `今の感情は「${keyword}」。\n黒木渚の【${songTitle}】が提示されました。\n#黒木渚 #楽曲診断`;
+        const shareText = `今の感情は「${moodText}」。\n黒木渚の【${songTitle}】が提示されました。\n#黒木渚 #楽曲診断`;
         document.getElementById('xShare').onclick = function() {
             const url = `https://twitter.com/intent/tweet?text=${encodeURIComponent(shareText)}&url=${encodeURIComponent(window.location.href)}`;
             window.open(url, '_blank');
@@ -233,4 +245,3 @@
 
 </body>
 </html>
-
