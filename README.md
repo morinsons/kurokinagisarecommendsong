@@ -1,2 +1,3 @@
 # kurokinagisarecommendsong
-kurokinagisa recommend song
+ミュージシャン・小説家・ナレーター・ラジオDJとして活躍する黒木渚
+そのときの気分に合わせた彼女の楽曲へのリンクを提案してくれます。
