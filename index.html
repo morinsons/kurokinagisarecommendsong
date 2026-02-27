@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>黒木渚 楽曲oracle｜Spotify Edition</title>
+    <title>黒木渚 楽曲oracle｜YouTube Edition</title>
     <style>
         :root {
             --primary-red: #e60012;
@@ -227,14 +227,18 @@
 
         document.getElementById('songTitle').innerText = `「${songTitle}」`;
         
-        // 【サイト内の再生ボタン用】Spotifyリンク（この機能は維持）
+        // Spotify検索リンクの作成
         const searchQuery = encodeURIComponent(`黒木渚 ${songTitle}`);
-        document.getElementById('spotLink').href = `https://open.spotify.com/search/${searchQuery}`;
+        const spotifySearchUrl = `https://open.spotify.com/search/${searchQuery}`;
+        document.getElementById('spotLink').href = spotifySearchUrl;
         
         document.getElementById('result').style.display = 'block';
 
-        // 【X共有用】Spotifyのリンクを含まないクリーンな文章
-        const shareText = `今の感情は「${moodText}」。\n感情をもとに黒木渚の【${songTitle}】が提示されました。\n#黒木渚 #楽曲診断\n\n💡楽曲診断リンク\nhttps://morinsons.github.io/kurokinagisarecommendsong/`;
+        // YouTube検索リンクの作成
+        const youtubeSearchUrl = `https://www.youtube.com/results?search_query=${searchQuery}`;
+
+        // Xシェア設定（YouTubeのリンクを追加）
+        const shareText = `今の感情は「${moodText}」。\n感情をもとに黒木渚の【${songTitle}】が提示されました。\n#黒木渚 #楽曲診断\n\n📺 YouTubeで聴く\n${youtubeSearchUrl}\n\n💡楽曲診断リンク\nhttps://morinsons.github.io/kurokinagisarecommendsong/`;
         
         document.getElementById('xShare').onclick = function() {
             const url = `https://twitter.com/intent/tweet?text=${encodeURIComponent(shareText)}`;
