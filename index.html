@@ -1,221 +1,4 @@
-<!DOCTYPE html>
-<html lang="ja">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>黒木渚 楽曲oracle｜Spotify Edition</title>
-    <style>
-        :root {
-            --primary-red: #e60012;
-            --dark-bg: #0d0d0d;
-            --card-bg: #1a1a1a;
-            --text-gray: #cccccc;
-        }
-
-        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
-
-        body {
-            font-family: 'Helvetica Neue', Arial, "Hiragino Kaku Gothic ProN", "Hiragino Sans", Meiryo, sans-serif;
-            background-color: var(--dark-bg);
-            background-image: radial-gradient(circle at top, #440000 0%, #0d0d0d 90%);
-            color: #fff;
-            margin: 0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-            padding: 20px;
-        }
-
-        .container {
-            width: 100%;
-            max-width: 380px;
-            background: var(--card-bg);
-            padding: 45px 30px;
-            border-radius: 30px;
-            box-shadow: 0 25px 60px rgba(0,0,0,0.8);
-            border: 1px solid #333;
-            text-align: center;
-        }
-
-        h1 {
-            font-size: 2rem;
-            margin-bottom: 8px;
-            color: var(--primary-red);
-            letter-spacing: 6px;
-            font-weight: 900;
-        }
-
-        .subtitle {
-            font-size: 0.7rem;
-            color: var(--text-gray);
-            margin-bottom: 40px;
-            text-transform: uppercase;
-            letter-spacing: 3px;
-        }
-
-        .form-group {
-            text-align: center;
-            margin-bottom: 30px;
-        }
-
-        label {
-            display: block;
-            font-size: 0.9rem;
-            margin-bottom: 15px;
-            color: #aaa;
-        }
-
-        select {
-            width: 100%;
-            height: 60px;
-            background: #000;
-            border: 2px solid #333;
-            border-radius: 15px;
-            color: #fff;
-            padding: 0 20px;
-            font-size: 1.2rem;
-            font-weight: bold;
-            outline: none;
-            text-align: center;
-            transition: all 0.3s;
-            cursor: pointer;
-        }
-
-        select:focus {
-            border-color: var(--primary-red);
-        }
-
-        button.main-btn {
-            width: 100%;
-            height: 65px;
-            background-color: var(--primary-red);
-            color: white;
-            border: none;
-            border-radius: 15px;
-            font-size: 1.3rem;
-            font-weight: bold;
-            cursor: pointer;
-            box-shadow: 0 5px 20px rgba(230, 0, 18, 0.4);
-            transition: transform 0.1s, opacity 0.2s;
-        }
-
-        button.main-btn:active { transform: scale(0.95); opacity: 0.9; }
-
-        #result {
-            margin-top: 40px;
-            display: none;
-            animation: slideUp 0.8s cubic-bezier(0.22, 1, 0.36, 1) forwards;
-        }
-
-        @keyframes slideUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
-
-        .result-card {
-            background: #000;
-            padding: 30px 20px;
-            border-radius: 20px;
-            border: 1px solid var(--primary-red);
-            position: relative;
-        }
-
-        .song-name {
-            font-size: 1.5rem;
-            font-weight: bold;
-            margin: 10px 0 30px 0;
-            display: block;
-            line-height: 1.5;
-            color: #fff;
-        }
-
-        .link-btn {
-            width: 100%;
-            padding: 18px;
-            background: #1DB954;
-            border-radius: 12px;
-            text-decoration: none;
-            font-size: 1rem;
-            font-weight: bold;
-            color: #fff;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin-bottom: 25px;
-            transition: opacity 0.2s;
-        }
-
-        .link-btn:active { opacity: 0.8; }
-
-        .share-btn {
-            width: 100%;
-            padding: 14px;
-            background: transparent;
-            color: #999;
-            border: 1px solid #444;
-            border-radius: 50px;
-            font-size: 0.85rem;
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-
-        .share-btn:active { color: #fff; border-color: #fff; }
-    </style>
-</head>
-<body>
-
-<div class="container">
-    <h1>黒木渚</h1>
-    <div class="subtitle">Emotional Oracle</div>
-    
-    <div class="form-group">
-        <label>今の感情を選択してください</label>
-        <select id="mood">
-            <option value="love">好き</option>
-            <option value="hate">嫌い</option>
-            <option value="live">生きる</option>
-            <option value="die">死ぬ</option>
-        </select>
-    </div>
-
-    <button class="main-btn" onclick="recommendSong()">今の1曲を受け取る</button>
-
-    <div id="result">
-        <div class="result-card">
-            <span class="subtitle" style="display:block; margin-bottom:5px;">あなたに託された１曲</span>
-            <span id="songTitle" class="song-name"></span>
-            
-            <a id="spotLink" class="link-btn" target="_blank">Spotify で再生</a>
-
-            <button id="xShare" class="share-btn">𝕏 で共有する</button>
-        </div>
-    </div>
-</div>
-
-<script>
-    const songDatabase = {
-        love: [
-            "あたしの心臓あげる", "虎視眈々と淡々と", "君が私をダメにする", "V.I.P.", "さかさまの雨", "灯台", 
-            "ピカソ", "大予言", "予測不能の1秒先も濁流みたいに愛してる", "枕詞", "107", "モンロー", "Gatsby", 
-            "大本命", "白夜", "はさみ", "金魚姫", "合わせ鏡", "命がけで欲しいものひとつ", "レスポール", "窓", "落雷"
-        ],
-        hate: [
-            "原点怪奇", "砂金", "クマリ", "ふりだし", "おんな・おとこ・おんな",   
-            "ふざけんな世界、ふざけろよ", "レスポール", "ロックミュージシャンのためのエチュード第0楽章", 
-            "アンチスーパースター", "ダ・カーポ", "テンプレート", "彼岸花", "マトリョーシカ", "ONE", "プラナリア",
-            "懺悔録", "あしながおじさん", "あしかせ", "赤紙", "うすはりの少女"
-        ],
-        live: [
-            "革命", "アーモンド", "解放区への旅", "タイガー", "カイワレ", "月曜日に生まれた子供は",
-            "テーマ", "檸檬の棘", "独立上昇曲 第一番", "かたつむりとダリア", "心がイエスと言ったなら", "ようこそ世界へ", "竹", 
-            "ロマン", "エジソン", "カルデラ", "器器回回", "象に踏まれても", "フラフープ"
-        ],
-        die: [
-            "骨", "死んだ文豪に恋をした", "あたしの心臓あげる", "Sick", "Magnolia", "砂の城",
-            "死に損ないのパレード", "美しい滅びかた", "ゴーストノート", "ブラウスと亡霊", "アンモナイト", "ブルー",
-            "ウエット", "カタルシスかく語りき"
-        ]
-    };
-
-    function recommendSong() {
+function recommendSong() {
         var moodSelect = document.getElementById('mood');
         var mood = moodSelect.value;
         var moodText = moodSelect.options[moodSelect.selectedIndex].text;
@@ -225,16 +8,17 @@
 
         var songTitle = list[Math.floor(Math.random() * list.length)];
 
+        // 画面表示
         document.getElementById('songTitle').innerText = "「" + songTitle + "」";
         
-        // Spotify検索リンクの生成 (最も確実な結合方法に変更)
+        // Spotifyアプリ用リンク（ここはそのまま維持）
         var spotifySearchUrl = "https://open.spotify.com/search/" + encodeURIComponent("黒木渚 " + songTitle);
         document.getElementById('spotLink').href = spotifySearchUrl;
         
         document.getElementById('result').style.display = 'block';
 
-        // Xシェア設定
-        var shareText = "今の感情は「" + moodText + "」。\n感情をもとに黒木渚の【" + songTitle + "】が提示されました。\n#黒木渚 #楽曲診断\n\n🎧 Spotifyで聴く\n" + spotifySearchUrl + "\n\n💡楽曲診断リンク\nhttps://morinsons.github.io/kurokinagisarecommendsong/";
+        // Xシェア設定（Spotifyのリンクと文言を完全に削除）
+        var shareText = "今の感情は「" + moodText + "」。\n感情をもとに黒木渚の【" + songTitle + "】が提示されました。\n#黒木渚 #楽曲診断\n\n💡楽曲診断リンク\nhttps://morinsons.github.io/kurokinagisarecommendsong/";
         
         document.getElementById('xShare').onclick = function() {
             var url = "https://twitter.com/intent/tweet?text=" + encodeURIComponent(shareText);
@@ -243,7 +27,3 @@
 
         if (window.navigator.vibrate) window.navigator.vibrate([50]);
     }
-</script>
-
-</body>
-</html>
