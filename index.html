@@ -227,14 +227,14 @@
 
         document.getElementById('songTitle').innerText = `「${songTitle}」`;
         
-        // Spotify検索リンクの作成
+        // Spotify検索リンクの作成 (バッククォートと${}で変数を埋め込み)
         const searchQuery = encodeURIComponent(`黒木渚 ${songTitle}`);
         const spotifySearchUrl = `https://open.spotify.com/search/${searchQuery}`;
         document.getElementById('spotLink').href = spotifySearchUrl;
         
         document.getElementById('result').style.display = 'block';
 
-        // Xシェア設定（Spotifyの検索結果リンクも追加）
+        // Xシェア設定（Spotifyリンクを修正）
         const shareText = `今の感情は「${moodText}」。\n感情をもとに黒木渚の【${songTitle}】が提示されました。\n#黒木渚 #楽曲診断\n\n🎧 Spotifyで聴く\n${spotifySearchUrl}\n\n💡楽曲診断リンク\nhttps://morinsons.github.io/kurokinagisarecommendsong/`;
         
         document.getElementById('xShare').onclick = function() {
