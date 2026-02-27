@@ -191,7 +191,6 @@
 </div>
 
 <script>
-    // 楽曲データベース（エラー箇所をすべて修正済み）
     const songDatabase = {
         love: [
             "あたしの心臓あげる", "虎視眈々と淡々と", "君が私をダメにする", "V.I.P.", "さかさまの雨", "灯台", 
@@ -222,22 +221,21 @@
         const moodText = moodSelect.options[moodSelect.selectedIndex].text;
         
         const list = songDatabase[mood];
-        
-        // リストが存在しない場合などのエラー防止
         if (!list) return;
 
         const songTitle = list[Math.floor(Math.random() * list.length)];
 
         document.getElementById('songTitle').innerText = `「${songTitle}」`;
         
-        // Spotify検索リンクの生成
+        // Spotify検索リンクの作成
         const searchQuery = encodeURIComponent(`黒木渚 ${songTitle}`);
-        document.getElementById('spotLink').href = `https://open.spotify.com/search/${searchQuery}`;
+        const spotifySearchUrl = `https://open.spotify.com/search/${searchQuery}`;
+        document.getElementById('spotLink').href = spotifySearchUrl;
         
         document.getElementById('result').style.display = 'block';
 
-        // Xシェア設定
-        const shareText = `今の感情は「${moodText}」。\n感情をもとに黒木渚の【${songTitle}】が提示されました。\n#黒木渚 #楽曲診断\n\n💡楽曲診断リンク\nhttps://morinsons.github.io/kurokinagisarecommendsong/`;
+        // Xシェア設定（Spotifyの検索結果リンクも追加）
+        const shareText = `今の感情は「${moodText}」。\n感情をもとに黒木渚の【${songTitle}】が提示されました。\n#黒木渚 #楽曲診断\n\n🎧 Spotifyで聴く\n${spotifySearchUrl}\n\n💡楽曲診断リンク\nhttps://morinsons.github.io/kurokinagisarecommendsong/`;
         
         document.getElementById('xShare').onclick = function() {
             const url = `https://twitter.com/intent/tweet?text=${encodeURIComponent(shareText)}`;
@@ -250,4 +248,3 @@
 
 </body>
 </html>
-
